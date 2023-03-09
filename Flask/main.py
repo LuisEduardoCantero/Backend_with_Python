@@ -3,21 +3,23 @@ from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired
-
+import unittest
+from app import create_app
+from app.forms import LoginForm
 
 # creamos una instancia de flask y de Bootstrap
-app = Flask(__name__)
-bootstrap = Bootstrap(app)
-app.config['SECRET_KEY'] = 'SUPER_SECRETO'
+app = create_app()
 
-todos = ['TODO_1', 'TODO_1', 'TODO_4', 'TODO_3', 'TODO_2']
+todos = ['Comprar cafe', 'Comprar leche', 'Comprar todo', 'Comprar Saldo', 'Comprar puntos']
 
-class LoginForm(FlaskForm):
-    username = StringField('Nombre de usuario', validators = [DataRequired()])
-    password = PasswordField('Password', validators = [DataRequired()])
-    submit = SubmitField('Enviar')
     
-
+@app.cli.command()
+def test():
+    tests = unittest.TestLoader().discover('tests')
+    unittest.TextTestRunner().run(tests)
+    
+    
+    
 @app.errorhandler(404)
 def not_found(error):
     
